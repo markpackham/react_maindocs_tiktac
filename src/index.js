@@ -56,14 +56,32 @@ class Game extends React.Component {
     };
   }
 
+  handleClick(i) {
+    const history = this.state.history;
+    const current = history[history.length - 1];
+    const squares = current.squares.slice();
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    squares[i] = this.state.xIsNext ? "X" : "O";
+    this.setState({
+      history: history.concat([
+        {
+          squares: squares,
+        },
+      ]),
+      xIsNext: !this.state.xIsNext,
+    });
+  }
+
   render() {
     const history = this.state.history;
     const current = history[history.length - 1];
-    const winner = calculateWinner(this.state.squares);
-    let status;
+    const winner = calculateWinner(current.squares);
 
+    let status;
     if (winner) {
-      status = `Winner ${winner}`;
+      status = `Winner: ${winner}`;
     } else {
       status = `Next player: ${this.state.xIsNext ? "X" : "O"}`;
     }
@@ -82,24 +100,6 @@ class Game extends React.Component {
         </div>
       </div>
     );
-  }
-
-  handleClick(i) {
-    const history = this.state.history;
-    const current = history[history.length - 1];
-    const squares = current.squares.slice();
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-    squares[i] = this.state.xIsNext ? "X" : "O";
-    this.setState({
-      history: history.concat([
-        {
-          squares: squares,
-        },
-      ]),
-      xIsNext: !this.state.xIsNext,
-    });
   }
 }
 
